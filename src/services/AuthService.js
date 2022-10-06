@@ -1,5 +1,5 @@
 import Axios from "axios"
-const url = "http://localhost:3500/api/"
+const url = "http://localhost:3500/"
 
 export default {
 	async login (credentials) {

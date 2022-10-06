@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken")
 const db = require("../db/connection")
 const userMiddleware = require("../middleware/users.js")
 
-router.post("sign-up", userMiddleware.validateRegister, (req, res, next) => {
+router.post("/sign-up", userMiddleware.validateRegister, (req, res, next) => {
 	db.query(
 		`SELECT * FROM user_login WHERE LOWER(username) = LOWER(${db.escape(
 			req.body.username
@@ -25,8 +25,8 @@ router.post("sign-up", userMiddleware.validateRegister, (req, res, next) => {
 					} else {
 						// has hashed pw => add to database
 						db.query(
-						`INSERT INTO user_login (username, password) VALUES (
-						${db.escape(req.body.username)}, ${db.escape(hash)})`,
+						`INSERT INTO user_login (username, password, last_login) VALUES (
+						${db.escape(req.body.username)}, ${db.escape(hash)}, now())`,
 							(err, result) => {
 								if (err) {
 									throw err
@@ -84,7 +84,7 @@ router.post("/login", (req, res, next) => {
 							}
 						)
 						db.query(
-							`UPDATE user_login SET last_login = now() WHERE id = "${result[0].id}"`
+							`UPDATE user_login SET last_login = now() WHERE id_login = "${result[0].id}"`
 						)
 						return res.status(200).send({
 							msg: "Zalogowano!",

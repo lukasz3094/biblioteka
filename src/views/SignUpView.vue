@@ -1,5 +1,6 @@
 <template>
 	<div class="w-75 container">
+		
 		<div class="text-center">
 			<h1 class="p1 m-1">Zarejestruj się</h1>
 		</div>
@@ -12,16 +13,20 @@
 		
 		<div class="mb-3">
 			<label class="form-label">Hasło</label>
-			<input class="form-control" type="text" placeholder="Hasło" 
+			<input class="form-control" type="password" placeholder="Hasło" 
 				v-model="password" />
 		</div>
 
 		<div class="mb-3">
 			<label class="form-label">Powtórz Hasło</label>
 			<input
-				class="form-control" type="text"
+				class="form-control" type="password"
 				placeholder="Powtórz hasło" v-model="password_repeat"
 			/>
+		</div>
+		
+		<div class="mb-3" v-if="msg">
+			<p class="text-danger p-2 m-1 text-center h2">{{ msg }}</p>
 		</div>
 		
 		<div class="mb-3 text-center">
@@ -30,9 +35,6 @@
 			</button>
 		</div>
 		
-		<div class="mb-3" v-if="msg">
-			<p class="background-danger text-white p-1 m-1">{{ msg }}</p>
-		</div>
 	</div>
 </template>
 <script>
