@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken")
 const db = require("../db/connection")
 const userMiddleware = require("../middleware/users.js")
 
+// sign up
 router.post("/sign-up", userMiddleware.validateRegister, (req, res, next) => {
 	db.query(
 		`SELECT * FROM user_login WHERE LOWER(username) = LOWER(${db.escape(
@@ -46,6 +47,7 @@ router.post("/sign-up", userMiddleware.validateRegister, (req, res, next) => {
 	)
 })
 
+// login
 router.post("/login", (req, res, next) => {
 	db.query(
 		`SELECT * FROM user_login WHERE username = ${db.escape(req.body.username)}`,
@@ -101,12 +103,37 @@ router.post("/login", (req, res, next) => {
 	)
 })
 
+// get all book with no filters
 router.get("/all-books", userMiddleware.isLoggedIn, (req, res, next) => {
 	db.query(
 		`SELECT id_ksiazki, tytul, rok_wydania, isbn, imie, nazwisko, nazwa 
 		FROM ksiazka AS k INNER JOIN autorzy AS a 
 		ON k.id_autora = a.id_autora INNER JOIN kategorie AS ka ON 
 		k.id_kategorii = ka.id_kategorii`,
+		(err, result) => {
+			if (err) {
+				throw err
+				return res.status(400).send({
+					msg: err
+				})
+			}
+			if (!result.length) {
+				return res.status(404).send({
+					msg: "Nie znaleziono."
+				})
+			} else {
+				return res.send(result)
+			}
+		}
+	)
+})
+
+// books that are able to borrow
+router.get("/to-borrow-books", userMiddleware.isLoggedIn, (req, res, next) => {
+	db.query(
+		`SELECT e.id_egzemplarza, e.isbn FROM egzemplarze AS e 
+		LEFT JOIN termin AS t ON t.id_egzemplarza = e.id_egzemplarza 
+		WHERE t.id_egzemplarza IS NULL`,
 		(err, result) => {
 			if (err) {
 				throw err

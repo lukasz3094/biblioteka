@@ -44,7 +44,8 @@ export default {
 	data () {
 		return {
 			username: "",
-			books: null
+			books: null,
+			ableToBorrowBooks: null
 		}
 	},
 	// computed: {
@@ -62,7 +63,8 @@ export default {
 		}
 		this.username = this.$store.getters.getUser.username
 		this.books = await AuthService.getBooksFromDb()
-		console.log(this.books)
+		this.ableToBorrowBooks = await AuthService.getToBorrowBooksFromDb()
+		console.log(this.ableToBorrowBooks)
 	}
 }
 </script>
