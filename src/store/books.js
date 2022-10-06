@@ -3,7 +3,7 @@ import AuthService from "@/services/AuthService"
 export default {
     state: {
         allBooks: null,
-        ableToBorrowBooks: null
+        ableToBorrowBooks: null,
     },
     getters: {
         getAllBooks: state => {
@@ -11,7 +11,8 @@ export default {
         },
         getAbleToBorrowBooks: state => {
             return state.ableToBorrowBooks
-        }
+        },
+
     },
     mutations: {
         SET_ALL_BOOKS: (state, data) => {
@@ -19,7 +20,7 @@ export default {
         },
         SET_ABLE_TO_BORROW_BOOKS: (state, data) => {
             state.ableToBorrowBooks = data
-        }
+        },
     },
     actions: {
         async findAllBooks ({ commit }) {
@@ -29,6 +30,11 @@ export default {
         async findAbleToBorrowBooks ({ commit }) {
             let response = await AuthService.getToBorrowBooksFromDb()
             commit("SET_ABLE_TO_BORROW_BOOKS", response)
+        },
+        async borrowBook (state, { bookId, userId }) {
+            let response = await AuthService.borrowBook({ bookId, userId })
+            console.log(response)
+            return response
         }
     }
 }

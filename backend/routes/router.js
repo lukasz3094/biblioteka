@@ -157,4 +157,37 @@ router.get("/to-borrow-books", userMiddleware.isLoggedIn, (req, res, next) => {
 	)
 })
 
+// book for borrow
+router.get("/book-by-id", userMiddleware.isLoggedIn, (req, res, next) => {
+	data = req.query
+	db.query(
+		`INSERT INTO wypozyczenia (id_egzemplarza, id_login)
+		VALUES ('${data.bookId}', '${data.userId}')`,
+		(err, result) => {
+			if (err) {
+				throw err
+				return res.status(400).send({
+					msg: err
+				})
+			}
+			db.query(
+				`INSERT INTO termin (data_wypozyczenia, data_oddania, 
+				id_egzemplarza) VALUES(now(), DATE_ADD(now(), INTERVAL 30 day),
+				'${data.bookId}' )`,
+				(err, result) => {
+					if (err) {
+						throw err
+						return res.status(400).send({
+							msg: err
+						})
+					}
+					return res.status(201).send({
+						msg: "Pomyślnie wypożyczono. Termin oddania minie za 30 dni."
+					})
+				}
+			)
+		}
+	)
+})
+
 module.exports = router

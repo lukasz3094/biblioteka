@@ -29,7 +29,7 @@ export default createStore({
 			state.token = token
 		},
 		SET_USER: (state, user) => { 
-			state.user = { "id": user, "username": user.username }
+			state.user = { "id": user.id_login, "username": user.username }
 		},
 		RESET: state => {
 			Object.assign(state, getDefaultState())
