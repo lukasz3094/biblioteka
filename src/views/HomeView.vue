@@ -15,7 +15,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-for="book in books" :key="book.id_ksiazki">
+				<tr v-for="book in allBooks" :key="book.id_ksiazki">
 					<th scope="row">{{ book.id_ksiazki }}</th>
 					<td>{{ book.tytul }}</td>
 					<td>{{ book.imie }} {{ book.nazwisko }}</td>
@@ -37,34 +37,38 @@
 </template>
 
 <script>
-import AuthService from "@/services/AuthService"
-// import { mapState } from "vuex"
+import { mapGetters, mapActions } from "vuex"
 
 export default {
 	data () {
 		return {
 			username: "",
-			books: null,
-			ableToBorrowBooks: null
 		}
 	},
-	// computed: {
-	// 	...mapState({ user: "user" })
-	// },
+	computed: {
+		...mapGetters({ 
+			allBooks: "getAllBooks",  
+			toBorrowBooks: "getAbleToBorrowBooks"
+		})
+	},
 	methods: {
 		logout() {
 			this.$store.dispatch("logout")
 			this.$router.push("/login")
-		}
+		},
+		...mapActions({
+			findAllBooks: "findAllBooks",
+			findToBorrowBooks: "findAbleToBorrowBooks"
+		})
 	},
 	async created() {
 		if (!this.$store.getters.isLoggedIn) {
 			this.$router.push("/login")
 		}
 		this.username = this.$store.getters.getUser.username
-		this.books = await AuthService.getBooksFromDb()
-		this.ableToBorrowBooks = await AuthService.getToBorrowBooksFromDb()
-		console.log(this.ableToBorrowBooks)
+		this.findAllBooks()
+		this.findToBorrowBooks()
+		console.log(this.toBorrowBooks)
 	}
 }
 </script>

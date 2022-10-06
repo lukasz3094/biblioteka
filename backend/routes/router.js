@@ -131,8 +131,13 @@ router.get("/all-books", userMiddleware.isLoggedIn, (req, res, next) => {
 // books that are able to borrow
 router.get("/to-borrow-books", userMiddleware.isLoggedIn, (req, res, next) => {
 	db.query(
-		`SELECT e.id_egzemplarza, e.isbn FROM egzemplarze AS e 
-		LEFT JOIN termin AS t ON t.id_egzemplarza = e.id_egzemplarza 
+		`SELECT DISTINCT k.id_ksiazki, k.tytul, k.rok_wydania, k.isbn,
+		a.imie, a.nazwisko, ka.nazwa
+		FROM egzemplarze AS e 
+		LEFT JOIN termin AS t ON t.id_egzemplarza = e.id_egzemplarza
+		INNER JOIN ksiazka AS k ON k.id_ksiazki = e.id_ksiazki 
+		INNER JOIN autorzy AS a ON a.id_autora = k.id_autora
+		INNER JOIN kategorie AS ka ON ka.id_kategorii = k.id_kategorii
 		WHERE t.id_egzemplarza IS NULL`,
 		(err, result) => {
 			if (err) {
