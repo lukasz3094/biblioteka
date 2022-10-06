@@ -101,9 +101,28 @@ router.post("/login", (req, res, next) => {
 	)
 })
 
-router.get('/secret-route', userMiddleware.isLoggedIn, (req, res, next) => {
-	console.log(req.userData)
-	res.send('This is the secret content. Only logged in users can see that!');
+router.get("/all-books", userMiddleware.isLoggedIn, (req, res, next) => {
+	db.query(
+		`SELECT id_ksiazki, tytul, rok_wydania, isbn, imie, nazwisko, nazwa 
+		FROM ksiazka AS k INNER JOIN autorzy AS a 
+		ON k.id_autora = a.id_autora INNER JOIN kategorie AS ka ON 
+		k.id_kategorii = ka.id_kategorii`,
+		(err, result) => {
+			if (err) {
+				throw err
+				return res.status(400).send({
+					msg: err
+				})
+			}
+			if (!result.length) {
+				return res.status(404).send({
+					msg: "Nie znaleziono."
+				})
+			} else {
+				return res.send(result)
+			}
+		}
+	)
 })
 
 module.exports = router

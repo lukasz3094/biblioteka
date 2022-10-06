@@ -12,9 +12,7 @@ const getDefaultState = () => {
 export default createStore({
 	strict: true,
 	plugins: [ createPersistedState() ],
-	state: {
-		state: getDefaultState()
-	},
+	state: getDefaultState(),
 	getters: {
 		isLoggedIn: state => {
 			return state.token
@@ -25,24 +23,24 @@ export default createStore({
 	},
 	mutations: {
 		SET_TOKEN: (state, token) => {
-			state.token = token;
+			state.token = token
 		},
-		SET_USER: (state, user) => {
-			state.user = user;
+		SET_USER: (state, user) => { 
+			state.user = { "id": user, "username": user.username }
 		},
 		RESET: state => {
-			Object.assign(state, getDefaultState());
+			Object.assign(state, getDefaultState())
 		}
 	},
 	actions: {
 		login: ({ commit }, { token, user }) => {
-			commit('SET_TOKEN', token);
-			commit('SET_USER', user);
+			commit('SET_TOKEN', token)
+			commit('SET_USER', user)
 			// set auth header
-			Axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+			Axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
 		},
 		logout: ({ commit }) => {
-			commit('RESET', '');
+			commit('RESET', '')
 		}
 	},
 	modules: {

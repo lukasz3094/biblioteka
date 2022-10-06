@@ -36,5 +36,5 @@ module.exports = {
 				msg: 'Your session is not valid!'
 			})
 		}
-	}
+	},
 }
