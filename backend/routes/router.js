@@ -132,7 +132,7 @@ router.get("/all-books", userMiddleware.isLoggedIn, (req, res, next) => {
 router.get("/to-borrow-books", userMiddleware.isLoggedIn, (req, res, next) => {
 	db.query(
 		`SELECT DISTINCT k.id_ksiazki, k.tytul, k.rok_wydania, k.isbn,
-		a.imie, a.nazwisko, ka.nazwa
+		a.imie, a.nazwisko, ka.nazwa, e.id_egzemplarza
 		FROM egzemplarze AS e 
 		LEFT JOIN termin AS t ON t.id_egzemplarza = e.id_egzemplarza
 		INNER JOIN ksiazka AS k ON k.id_ksiazki = e.id_ksiazki 
@@ -157,7 +157,7 @@ router.get("/to-borrow-books", userMiddleware.isLoggedIn, (req, res, next) => {
 	)
 })
 
-// book for borrow
+// borrow book
 router.get("/book-by-id", userMiddleware.isLoggedIn, (req, res, next) => {
 	data = req.query
 	db.query(

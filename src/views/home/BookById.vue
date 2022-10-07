@@ -24,7 +24,7 @@
                 <tr>
                     <td colspan="2"></td>
                     <td>
-                        <button @click="borrowBook({ 'bookId': book.id_ksiazki,
+                        <button @click="borrowBook({ 'bookId': copyId,
                                 'userId': userId })"
                                 class="btn btn-primary text-uppercase">
                             Wypożycz
@@ -52,13 +52,17 @@ export default {
         book: {
             type: Object,
             required: true
+        },
+        copyId: {
+            type: Number,
+            required: true
         }
     },
     methods: {
         ...mapActions({ borrowBook: "borrowBook" })
     },
     created () {
-        this.userId = this.$store.getters.getUser.id.id_login
+        this.userId = this.$store.getters.getUser.id
     }
 }
 </script>
