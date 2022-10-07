@@ -39,14 +39,20 @@
                 </tr>
             </tfoot>
 		</table>
+        <div v-if="reqResponse">{{ reqResponse }}</div>
 </template>
 <script>
-import { mapActions } from "vuex"
+import { mapActions, mapGetters } from "vuex"
 export default {
     data () {
         return {
             userId: ''
         }
+    },
+    computed: {
+        ...mapGetters({
+            reqResponse: "getReqResponse"
+        })
     },
     props: {
         book: {
@@ -59,10 +65,19 @@ export default {
         }
     },
     methods: {
-        ...mapActions({ borrowBook: "borrowBook" })
+        ...mapActions({
+            borrowBook: "borrowBook",
+            unsetReqResponse: "unsetReqResponse" 
+        }),
+        borrowBookReq ({ bookId, userId }) {
+            this.borrowBook({ bookId, userId }, (response) => {
+                console.log(response);
+            })
+        }
     },
     created () {
         this.userId = this.$store.getters.getUser.id
+        this.unsetReqResponse()
     }
 }
 </script>

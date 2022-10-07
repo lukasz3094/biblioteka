@@ -4,6 +4,7 @@ export default {
     state: {
         allBooks: null,
         ableToBorrowBooks: null,
+        reqResponse: ""
     },
     getters: {
         getAllBooks: state => {
@@ -12,7 +13,9 @@ export default {
         getAbleToBorrowBooks: state => {
             return state.ableToBorrowBooks
         },
-
+        getReqResponse: state => {
+            return state.reqResponse
+        }
     },
     mutations: {
         SET_ALL_BOOKS: (state, data) => {
@@ -21,6 +24,12 @@ export default {
         SET_ABLE_TO_BORROW_BOOKS: (state, data) => {
             state.ableToBorrowBooks = data
         },
+        SET_REQ_RESPONSE: (state, res) => {
+            state.reqResponse = res.data.msg
+        },
+        UNSET_REQ_RESPONSE: (state) => {
+            state.reqResponse = ""
+        }
     },
     actions: {
         async findAllBooks ({ commit }) {
@@ -31,10 +40,12 @@ export default {
             let response = await BookReqService.getToBorrowBooksFromDb()
             commit("SET_ABLE_TO_BORROW_BOOKS", response)
         },
-        async borrowBook (state, { bookId, userId }) {
+        async borrowBook ({ commit }, { bookId, userId }) {
             let response = await BookReqService.borrowBook({ bookId, userId })
-            console.log(response)
-            return response
+            commit("SET_REQ_RESPONSE", response)
+        },
+        unsetReqResponse ({ commit }) {
+            commit("UNSET_REQ_RESPONSE")
         }
     }
 }
