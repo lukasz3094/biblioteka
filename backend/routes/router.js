@@ -162,7 +162,7 @@ router.get("/book-by-id", userMiddleware.isLoggedIn, (req, res, next) => {
 	data = req.query
 	db.query(
 		`INSERT INTO wypozyczenia (id_egzemplarza, id_login)
-		VALUES ('${data.bookId}', '${data.userId}')`,
+		VALUES ('${ data.bookId }', '${ data.userId }')`,
 		(err, result) => {
 			if (err) {
 				throw err
@@ -173,7 +173,7 @@ router.get("/book-by-id", userMiddleware.isLoggedIn, (req, res, next) => {
 			db.query(
 				`INSERT INTO termin (data_wypozyczenia, data_oddania, 
 				id_egzemplarza) VALUES(now(), DATE_ADD(now(), INTERVAL 30 day),
-				'${data.bookId}' )`,
+				'${ data.bookId }' )`,
 				(err, result) => {
 					if (err) {
 						throw err
@@ -212,12 +212,41 @@ router.get("/user-books", userMiddleware.isLoggedIn, (req, res, next) => {
 				})
 			}
 			if (!result.length) {
-				return res.status(404).send({
-					msg: "Nie znaleziono"
-				})
+				return res.send(null)
 			} else {
 				return res.send(result)
 			}
+		}
+	)
+})
+
+// return book
+router.get("/return-book", userMiddleware.isLoggedIn, (req, res, next) => {
+	data = req.query
+	db.query(
+		`DELETE FROM termin WHERE id_egzemplarza = ${ data.copyId }`,
+		(err) => {
+			if (err) {
+				throw err
+				return res.status(400).send({
+					msg: err
+				})
+			}
+			db.query(
+				`DELETE FROM wypozyczenia 
+				WHERE id_egzemplarza = ${ data.copyId }`,
+				(err, result) => {
+					if (err) {
+						throw err
+						return res.status(400).send({
+							msg: err
+						})
+					}
+					return res.status(201).send({
+						msg: "Pomyślnie zwrócono."
+					})
+				}
+			)
 		}
 	)
 })

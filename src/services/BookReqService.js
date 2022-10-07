@@ -20,5 +20,10 @@ export default {
 		const response = await Axios.get(`${url}user-books/`,
 				{ params: { "userId": userId } })
 		return response
+	},
+	async returnBook (copyId) {
+		const response = await Axios.get(`${url}return-book/`,
+				{ params: { "copyId": copyId } })
+		return response
 	}
 }

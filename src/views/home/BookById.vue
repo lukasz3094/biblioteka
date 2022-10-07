@@ -76,9 +76,7 @@ export default {
             unsetReqResponse: "unsetReqResponse" 
         }),
         borrowBookReq ({ bookId, userId }) {
-            this.borrowBook({ bookId, userId }, (response) => {
-                console.log(response);
-            })
+            this.borrowBook({ bookId, userId })
         },
         handleReturn () {
             this.$emit("clearChoosen")

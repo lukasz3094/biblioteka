@@ -58,6 +58,10 @@ export default {
             let response = await BookReqService.getUserBooks(
                 { userId })
             commit("SET_USER_BOOK", response)
+        },
+        async returnBook ({ commit }, copyId) {
+            let response = await BookReqService.returnBook(copyId)
+            commit("SET_REQ_RESPONSE", response)
         }
     }
 }
