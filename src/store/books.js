@@ -1,4 +1,4 @@
-import AuthService from "@/services/AuthService"
+import BookReqService from "@/services/BookReqService"
 
 export default {
     state: {
@@ -24,15 +24,15 @@ export default {
     },
     actions: {
         async findAllBooks ({ commit }) {
-            let response = await AuthService.getBooksFromDb()
+            let response = await BookReqService.getBooksFromDb()
             commit("SET_ALL_BOOKS", response)
         },
         async findAbleToBorrowBooks ({ commit }) {
-            let response = await AuthService.getToBorrowBooksFromDb()
+            let response = await BookReqService.getToBorrowBooksFromDb()
             commit("SET_ABLE_TO_BORROW_BOOKS", response)
         },
         async borrowBook (state, { bookId, userId }) {
-            let response = await AuthService.borrowBook({ bookId, userId })
+            let response = await BookReqService.borrowBook({ bookId, userId })
             console.log(response)
             return response
         }
