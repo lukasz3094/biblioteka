@@ -18,7 +18,7 @@
 					<td>{{ book.tytul }}</td>
 					<td>{{ book.imie }} {{ book.nazwisko }}</td>
 					<td>{{ book.nazwa }}</td>
-					<td class="col">{{ book.rok_wydania }}</td>
+					<td class="col-2">{{ book.rok_wydania }}</td>
 					<td>{{ book.isbn }}</td>
 					<td><button @click="setChoosenBook(book.isbn)" 
 							class="btn btn-secondary">
@@ -30,7 +30,9 @@
 	</div>
 
 	<div v-else>
-		<book-by-id :book="choosenBook" :copyId="copyId"></book-by-id>
+		<book-by-id :book="choosenBook" :copyId="copyId" 
+			@clearChoosen="clearChoosen">
+		</book-by-id>
 	</div>
 </template>
 <script>
@@ -69,6 +71,13 @@ export default {
 			this.noDuplicateBooks = 
 				[...new Map(this.toBorrowBooks.map(
 					v => [v.id_ksiazki, v])).values()]
+		},
+		clearChoosen () {
+			this.choosen = false
+			this.choosenBook = null
+			this.bookCopies = null
+			this.copyId = null
+			this.findToBorrowBooks().then(() => this.noDuplicateBook())
 		}
 	},
 	async created() {

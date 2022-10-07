@@ -16,11 +16,11 @@
 					<td>{{ book.tytul }}</td>
 					<td>{{ book.imie }} {{ book.nazwisko }}</td>
 					<td>{{ book.nazwa }}</td>
-					<td class="col">{{ book.rok_wydania }}</td>
+					<td class="col-2">{{ book.rok_wydania }}</td>
 					<td>{{ book.isbn }}</td>
 				</tr>
 			</tbody>
-            <tfoot>
+            <tfoot v-if="!reqResponse">
                 <tr>
                     <td colspan="2"></td>
                     <td>
@@ -39,11 +39,17 @@
                 </tr>
             </tfoot>
 		</table>
-        <div v-if="reqResponse">{{ reqResponse }}</div>
+        <div class="text-center" v-if="reqResponse">
+            <p class="p1 h2">{{ reqResponse }}</p>
+            <button @click="handleReturn()" class="btn btn-primary text-uppercase">
+                Powrót
+            </button>
+        </div>
 </template>
 <script>
 import { mapActions, mapGetters } from "vuex"
 export default {
+    emits: ["clearChoosen"],
     data () {
         return {
             userId: ''
@@ -73,6 +79,9 @@ export default {
             this.borrowBook({ bookId, userId }, (response) => {
                 console.log(response);
             })
+        },
+        handleReturn () {
+            this.$emit("clearChoosen")
         }
     },
     created () {
