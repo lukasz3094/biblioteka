@@ -190,4 +190,36 @@ router.get("/book-by-id", userMiddleware.isLoggedIn, (req, res, next) => {
 	)
 })
 
+// user books
+router.get("/user-books", userMiddleware.isLoggedIn, (req, res, next) => {
+	data = req.query
+	db.query(
+		`SELECT k.tytul, k.rok_wydania, k.isbn,
+		a.imie, a.nazwisko, ka.nazwa, e.id_egzemplarza
+		FROM egzemplarze AS e 
+		LEFT JOIN termin AS t ON t.id_egzemplarza = e.id_egzemplarza
+		INNER JOIN ksiazka AS k ON k.id_ksiazki = e.id_ksiazki 
+		INNER JOIN autorzy AS a ON a.id_autora = k.id_autora
+		INNER JOIN kategorie AS ka ON ka.id_kategorii = k.id_kategorii
+		INNER JOIN wypozyczenia AS w ON w.id_egzemplarza = e.id_egzemplarza
+		INNER JOIN user_login AS u on u.id_login = w.id_login
+		WHERE u.id_login = ${ data.userId }`, 
+		(err, result) => {
+			if (err) {
+				throw err
+				return res.status(400).send({
+					msg: err
+				})
+			}
+			if (!result.length) {
+				return res.status(404).send({
+					msg: "Nie znaleziono"
+				})
+			} else {
+				return res.send(result)
+			}
+		}
+	)
+})
+
 module.exports = router

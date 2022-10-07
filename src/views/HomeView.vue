@@ -14,6 +14,11 @@
 							exact-active-class="btn-primary">
 						Dostępne
 					</router-link>
+
+					<router-link class="btn p-2" to="/user-books" 
+							exact-active-class="btn-primary">
+						Twoje książki
+					</router-link>
 				</div>
 
 				<div class="ms-auto h4">{{ username }}</div>

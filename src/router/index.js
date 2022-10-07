@@ -6,6 +6,7 @@ import LoginView from "../views/LoginView"
 import AllBooks from "../views/home/AllBooks"
 import ToBorrowBooks from "../views/home/ToBorrowBooks"
 import BookById from "../views/home/BookById"
+import UserBooks from "../views/home/UserBooks"
 
 const routes = [
 	{
@@ -27,6 +28,11 @@ const routes = [
 				path: "book-by-id",
 				name: "bookById",
 				component: BookById
+			},
+			{
+				path: "user-books",
+				name: "userBook",
+				component: UserBooks
 			},
 			{
 				path: "",
