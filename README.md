@@ -1,5 +1,9 @@
 # biblioteka
 
+## Logowanie
+```
+login: test2 hasło: haslo1
+
 ## Project setup
 ```
 npm install
